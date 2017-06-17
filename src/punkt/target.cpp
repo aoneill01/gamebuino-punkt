@@ -25,6 +25,10 @@ void Target::draw(Gamebuino &gb) {
   }
 }
 
+bool Target::isHit(byte x, byte y, byte s) const {
+  return (x + s > _x) && (x < _x + TARGET_SIZE) && (y + s > _y) && (y < _y + TARGET_SIZE);
+}
+
 bool Target::isTimeToDisplayHalo() {
   _haloTimer++;
   return (_haloTimer & 0x08) != 0;

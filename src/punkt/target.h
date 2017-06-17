@@ -6,6 +6,7 @@ class Target
     Target();
     void moveToNewLocation();
     void draw(Gamebuino &gb);
+    bool isHit(byte x, byte y, byte s) const;
 
   private:
     bool isTimeToDisplayHalo();

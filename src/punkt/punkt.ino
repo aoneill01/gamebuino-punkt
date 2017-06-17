@@ -6,13 +6,17 @@
 #include "player.h"
 #include "target.h"
 
+#define MAX_ENEMIES 50
+
 Gamebuino gb;
 // Represents the player
 Player player;
 // Represents the obstacles to avoid
-Enemy enemy[10];
+Enemy enemies[MAX_ENEMIES];
+byte enemyCount;
 // Represents what the player is trying to capture
 Target target;
+byte score;
 
 extern const byte font3x5[];
 
@@ -27,16 +31,22 @@ void loop() {
     if (gb.buttons.pressed(BTN_C)) reset();
     player.update(gb);
 
-    for (byte i = 0; i < 10; i++) 
+    for (byte i = 0; i < enemyCount; i++) 
     {
-      enemy[i].update(gb.frameCount + i * 30);
-      enemy[i].draw(gb);
+      enemies[i].update(gb.frameCount);
+      enemies[i].draw(gb);
     }
 
     player.draw(gb);
 
     target.draw(gb);
-    // target.moveToNewLocation();
+    if (target.isHit(player.getX(), player.getY(), 4)) {
+      target.moveToNewLocation();
+      if (enemyCount < MAX_ENEMIES) {
+        enemies[enemyCount++].spawn(gb.frameCount);
+      }
+      if (score < 100) score++;
+    }
 
     drawGutter();
   }
@@ -46,12 +56,10 @@ void reset() {
   gb.titleScreen(F("punkt"));
   gb.setFrameRate(30);
   gb.battery.show = false;
-  for (byte i = 0; i < 10; i++) 
-  {
-    enemy[i].setHorizontal(i % 2);
-    enemy[i].setY(i * 4 + 1);
-    enemy[i].setX(i * 4 + 1);
-  }
+  enemyCount = 0;
+  score = 0;
+  player = Player();
+  target = Target();
 }
 
 void drawGutter() {
@@ -62,6 +70,7 @@ void drawGutter() {
   gb.display.setColor(WHITE);
   gb.display.cursorX = BOARD_WIDTH + 1;
   gb.display.cursorY = 1;
-  gb.display.print("01");
+  if (score < 10) gb.display.print("0");
+  gb.display.print(String(score));
 }
 

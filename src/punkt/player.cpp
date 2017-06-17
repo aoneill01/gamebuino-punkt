@@ -5,8 +5,8 @@
 #define DIAG_DELTA 91
 
 Player::Player() {
-  _x = (BOARD_WIDTH - PLAYER_SIZE) >> 2;
-  _y = (BOARD_HEIGHT - PLAYER_SIZE) >> 2;
+  _x = (BOARD_WIDTH - PLAYER_SIZE) >> 1;
+  _y = (BOARD_HEIGHT - PLAYER_SIZE) >> 1;
 }
 
 void Player::update(Gamebuino &gb) {
