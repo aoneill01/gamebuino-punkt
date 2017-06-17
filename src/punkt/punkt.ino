@@ -1,11 +1,10 @@
 #include <SPI.h>
 #include <Gamebuino.h>
-
-#define GUTTER_WIDTH 9
-#define BOARD_WIDTH LCDWIDTH - GUTTER_WIDTH
-#define BOARD_HEIGHT LCDHEIGHT
+#include "enemy.h"
+#include "constants.h"
 
 Gamebuino gb;
+Enemy enemy[10];
 
 extern const byte font3x5[];
 
@@ -44,12 +43,26 @@ void loop() {
     gb.display.setFont(font3x5);
     gb.display.setColor(WHITE);
     gb.display.cursorX = LCDWIDTH - GUTTER_WIDTH + 1;
-    gb.display.cursorY = 8;
+    gb.display.cursorY = 1;
     gb.display.print("01");
+
+    for (byte i = 0; i < 10; i++) 
+    {
+      enemy[i].update(gb.frameCount + i * 30);
+      enemy[i].draw(gb);
+    }
   }
 }
 
 void reset() {
   gb.titleScreen(F("punkt"));
+  gb.setFrameRate(30);
+  gb.battery.show = false;
+  for (byte i = 0; i < 10; i++) 
+  {
+    enemy[i].setHorizontal(i % 2);
+    enemy[i].setY(i * 4 + 1);
+    enemy[i].setX(i * 4 + 1);
+  }
 }
 
