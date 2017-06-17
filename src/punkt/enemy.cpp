@@ -7,15 +7,12 @@
 #define HORIZ_CONST_TIME BOARD_WIDTH - ENEMY_SIZE - 2 * SLOW_DISTANCE
 #define VERT_CONST_TIME BOARD_HEIGHT - ENEMY_SIZE - 2 * SLOW_DISTANCE
 
-Enemy::Enemy()
-{
+Enemy::Enemy() {
   
 }
 
-void Enemy::update(unsigned long time)
-{
-  if (isHorizontal())
-  {
+void Enemy::update(unsigned long time) {
+  if (isHorizontal()) {
     int t = time % (HORIZ_CONST_TIME + HORIZ_CONST_TIME + SLOW_TIME + SLOW_TIME);
     if (t < HORIZ_CONST_TIME) {
       _x = SLOW_DISTANCE + t;
@@ -35,8 +32,7 @@ void Enemy::update(unsigned long time)
       _x = ((t * t) >> 6) - t + SLOW_DISTANCE;
     }
   }
-  else
-  {
+  else {
     int t = time % (VERT_CONST_TIME + VERT_CONST_TIME + SLOW_TIME + SLOW_TIME);
     if (t < VERT_CONST_TIME) {
       _y = SLOW_DISTANCE + t;
@@ -58,8 +54,7 @@ void Enemy::update(unsigned long time)
   }
 }
 
-void Enemy::draw(Gamebuino &gb) const
-{
+void Enemy::draw(Gamebuino &gb) const {
   gb.display.setColor(BLACK);
   gb.display.fillRect(_x, _y, ENEMY_SIZE, ENEMY_SIZE);  
 }
