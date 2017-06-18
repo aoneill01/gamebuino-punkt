@@ -60,7 +60,8 @@ void Enemy::draw(Gamebuino &gb) const {
 }
 
 void Enemy::spawn(unsigned long time) {
-  _horizontal = random(8) < 3;
+  _horizontal = random(BOARD_WIDTH + BOARD_HEIGHT) < BOARD_HEIGHT;
+  
   if (_horizontal) {
     _y = random(BOARD_HEIGHT - ENEMY_SIZE);
     _initTime = time - (HORIZ_CONST_TIME + (SLOW_TIME >> 1));
@@ -69,5 +70,10 @@ void Enemy::spawn(unsigned long time) {
     _x = random(BOARD_WIDTH - ENEMY_SIZE);
     _initTime = time - (VERT_CONST_TIME + (SLOW_TIME >> 1));
   }
+  
+  update(time);
 }
 
+bool Enemy::isHit(byte x, byte y, byte s) const {
+  return (x + s > _x) && (x < _x + ENEMY_SIZE) && (y + s > _y) && (y < _y + ENEMY_SIZE);
+}
