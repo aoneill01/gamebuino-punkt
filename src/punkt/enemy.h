@@ -6,7 +6,7 @@ class Enemy
     Enemy();
     void update(unsigned long time);
     void draw(Gamebuino &gb) const;
-    void spawn(unsigned long time);
+    void spawn(unsigned long time, byte playerX, byte playerY);
     bool isHit(byte x, byte y, byte s) const;
 
   private:

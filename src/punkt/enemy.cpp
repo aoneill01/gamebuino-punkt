@@ -59,16 +59,24 @@ void Enemy::draw(Gamebuino &gb) const {
   gb.display.fillRect(_x, _y, ENEMY_SIZE, ENEMY_SIZE);  
 }
 
-void Enemy::spawn(unsigned long time) {
+void Enemy::spawn(unsigned long time, byte playerX, byte playerY) {
   _horizontal = random(BOARD_WIDTH + BOARD_HEIGHT) < BOARD_HEIGHT;
   
   if (_horizontal) {
     _y = random(BOARD_HEIGHT - ENEMY_SIZE);
     _initTime = time - (HORIZ_CONST_TIME + (SLOW_TIME >> 1));
+    // Make sure it doesn't spawn close to the player
+    if (playerX > (BOARD_WIDTH >> 1)) {
+      _initTime -= HORIZ_CONST_TIME + SLOW_TIME;
+    }
   }
   else {
     _x = random(BOARD_WIDTH - ENEMY_SIZE);
     _initTime = time - (VERT_CONST_TIME + (SLOW_TIME >> 1));
+    // Make sure it doesn't spawn close to the player
+    if (playerY > (BOARD_HEIGHT >> 1)) {
+      _initTime -= VERT_CONST_TIME + SLOW_TIME;
+    }
   }
   
   update(time);
