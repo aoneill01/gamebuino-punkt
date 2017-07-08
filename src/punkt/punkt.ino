@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <Gamebuino.h>
+#include <EEPROM.h>
 
 #include "constants.h"
 #include "enemy.h"
@@ -80,8 +81,15 @@ const byte logoLarge[] PROGMEM = {64,29,
 
 void setup() {
   gb.begin();
-  gb.pickRandomSeed();
   reset();
+  // Load high score
+  if (EEPROM.read(0) == 42) {
+    highScore = EEPROM.read(1);
+  }
+  else {
+    EEPROM.write(0, 42);
+    EEPROM.update(1, 0);
+  }
 }
 
 void loop() {
@@ -117,6 +125,7 @@ void reset() {
 }
 
 void initializeGame() {
+  gb.pickRandomSeed();
   enemyCount = 0;
   score = 0;
   player = Player();
@@ -171,6 +180,9 @@ void doGameOver() {
     referenceTime = gb.frameCount;
     mode = MODE_MAIN_MENU;
   }
+
+  // Save the high score
+  EEPROM.update(1, highScore);
 }
 
 void doMainMenu() {
